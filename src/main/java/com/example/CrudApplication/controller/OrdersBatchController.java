@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/orders-batch-api")
 public class OrdersBatchController {
     @Autowired
     private OrdersBatchService ordersBatchService;
@@ -23,6 +25,11 @@ public class OrdersBatchController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/getAllBatches")
+    public ResponseEntity<String> getAllBatches() {
+        return new ResponseEntity<>("Received all batches",HttpStatus.OK);
     }
 
     // Endpoint to stream data to the client

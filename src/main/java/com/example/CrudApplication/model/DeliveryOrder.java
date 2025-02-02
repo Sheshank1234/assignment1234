@@ -57,8 +57,8 @@ public class DeliveryOrder {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "orders_batch_id", nullable = false)
-    private OrdersBatch ordersBatch;
+//    @ManyToOne
+//    @JoinColumn(name = "orders_batch_id", nullable = false)
+//    private OrdersBatch ordersBatch;
 
 }

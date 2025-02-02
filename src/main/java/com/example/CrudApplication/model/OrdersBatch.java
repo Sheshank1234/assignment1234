@@ -43,6 +43,6 @@ public class OrdersBatch {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "ordersBatch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DeliveryOrder> deliveryOrders = new ArrayList<>();
+//    @OneToMany(mappedBy = "ordersBatch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<DeliveryOrder> deliveryOrders = new ArrayList<>();
 }
