@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders-batch-api")
@@ -17,6 +16,11 @@ public class OrdersBatchController {
     @Autowired
     private OrdersBatchService ordersBatchService;
 
+
+    /**
+     * Initialises two delivery orders with each have the respective restaurant and customer location details
+     * @return - DeliveryOrder
+     */
     @PostMapping("/initiateDeliverySystem")
     public ResponseEntity<DeliveryOrder> initiateDeliverySystem(@RequestBody Object emptyRequestBody) {
         try {
@@ -27,10 +31,6 @@ public class OrdersBatchController {
         }
     }
 
-    @GetMapping("/getAllBatches")
-    public ResponseEntity<String> getAllBatches() {
-        return new ResponseEntity<>("Received all batches",HttpStatus.OK);
-    }
 
     // Endpoint to stream data to the client
     @GetMapping(value = "/sse/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -44,4 +44,9 @@ public class OrdersBatchController {
         ordersBatchService.broadcastMessage("Backend triggered update");
         return "Message sent to all clients!";
     }
+
+//    @GetMapping("/getAllBatches")
+//    public ResponseEntity<String> getAllBatches() {
+//        return new ResponseEntity<>("Received all batches",HttpStatus.OK);
+//    }
 }

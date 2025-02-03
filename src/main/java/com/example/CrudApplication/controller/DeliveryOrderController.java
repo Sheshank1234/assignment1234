@@ -18,8 +18,13 @@ public class DeliveryOrderController {
         @Autowired
           private DeliveryOrderService deliveryOrderService;
 
+
+    /**
+     * Returns list of all delivery orders
+     * @return - List of DeliveryOrder
+     */
         @GetMapping("/getAllDeliveryOrders")
-        public ResponseEntity<List<DeliveryOrder>> getDeliveryOrderById() {
+        public ResponseEntity<List<DeliveryOrder>> getAllDeliveryOrders() {
             List<DeliveryOrder> deliveryOrdersList = deliveryOrderService.getAllOrders();
             if (deliveryOrdersList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -27,6 +32,10 @@ public class DeliveryOrderController {
             return new ResponseEntity<>(deliveryOrdersList,HttpStatus.OK);
         }
 
+    /**
+     * For give two customers and two restaurants - this returns the path to be followed by delivery boy
+     * @return - DeliveryRoute
+     */
     @GetMapping("/getActiveBatchForDB")
     public ResponseEntity<DeliveryRoute> getActiveBatchForDB() {
         DeliveryRoute optimalPath = deliveryOrderService.getActiveBatchForDB();

@@ -19,34 +19,41 @@ public class OrdersBatchService {
             this.deliveryOrderRepository = deliveryOrderRepository;
         }
 
-        public DeliveryOrder initiateDeliverySystem() {
-            DeliveryOrder deliveryOrderDto1 = DeliveryOrder.builder()
-                    .orderId("ORDER12345")
-                    .orderStatus(OrderStatus.Pending)
-                    .restaurantName("R1")
-                    .restaurantLat(12.9756)
-                    .restaurantLong(77.5996)
-                    .customerName("C1")
-                    .customerLat(12.9786)
-                    .customerLong(77.6056)
-                    .build();
-            DeliveryOrder deliveryOrderObj1 = deliveryOrderRepository.save(deliveryOrderDto1);
-            DeliveryOrder deliveryOrderDto2 = DeliveryOrder.builder()
-                    .orderId("ORDER1234")
-                    .orderStatus(OrderStatus.Pending)
-                    .restaurantName("R2")
-                    .restaurantLat(12.9696)
-                    .restaurantLong(77.5896 )
-                    .customerName("C2")
-                    .customerLat(12.9656)
-                    .customerLong(77.5826)
-                    .build();
-            DeliveryOrder deliveryOrderObj2 = deliveryOrderRepository.save(deliveryOrderDto2);
-            return deliveryOrderObj1;
+    /**
+     * Initialises two delivery orders with each have the respective restaurant and customer location details
+     * @return - DeliveryOrder
+     */
+    public DeliveryOrder initiateDeliverySystem() {
+        List<DeliveryOrder> deliveryOrders = Arrays.asList(
+                DeliveryOrder.builder()
+                        .orderId("ORDER12345")
+                        .orderStatus(OrderStatus.Pending)
+                        .restaurantName("R1")
+                        .restaurantLat(12.9756)
+                        .restaurantLong(77.5996)
+                        .customerName("C1")
+                        .customerLat(12.9786)
+                        .customerLong(77.6056)
+                        .build(),
+                DeliveryOrder.builder()
+                        .orderId("ORDER1234")
+                        .orderStatus(OrderStatus.Pending)
+                        .restaurantName("R2")
+                        .restaurantLat(12.9696)
+                        .restaurantLong(77.5896)
+                        .customerName("C2")
+                        .customerLat(12.9656)
+                        .customerLong(77.5826)
+                        .build()
+        );
+        // Save all orders in one batch operation (better for performance)
+        List<DeliveryOrder> savedOrders = deliveryOrderRepository.saveAll(deliveryOrders);
+        // Return the first saved order (if needed)
+        return savedOrders.isEmpty() ? null : savedOrders.get(0);
+    }
 
-        }
 
-        // Adds a new emitter for the client
+    // Adds a new emitter for the client
         public SseEmitter addEmitter() {
             SseEmitter emitter = new SseEmitter();
             emitters.add(emitter);

@@ -6,22 +6,48 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class DeliveryOrderService {
     private static final double AVERAGE_SPEED_KMH = 20.0;
     private final DeliveryOrderRepository deliveryOrderRepository;
+    private static final Logger log = LoggerFactory.getLogger(DeliveryOrderService.class);
 
     public DeliveryOrderService(DeliveryOrderRepository deliveryOrderRepository) {
         this.deliveryOrderRepository = deliveryOrderRepository;
     }
 
+    /**
+     * Returns list of all delivery orders
+     * @return - List of DeliveryOrder
+     */
+    public List<DeliveryOrder> getAllOrders() {
+        try {
+            return deliveryOrderRepository.findAll();
+        } catch (Exception e) {
+            log.error("Error fetching orders: {}", e.getMessage(), e);
+            // Return an empty list to avoid breaking the application
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * For give two customers and two restaurants - this returns the path to be followed by delivery boy
+     * @return - DeliveryRoute
+     */
     public DeliveryRoute getActiveBatchForDB() {
-        List<DeliveryOrder> orders = deliveryOrderRepository.findAll();
-        Location deliveryBoyLocation = new Location("DB1", 12.9716, 77.5946);
-        return findOptimalPath(deliveryBoyLocation,orders.get(0),orders.get(1));
+        try {
+            List<DeliveryOrder> orders = deliveryOrderRepository.findAll();
+            log.error("List of orders are : {}",orders);
+            Location deliveryBoyLocation = new Location("DB1", 12.9716, 77.5946);
+            log.error("Delivery boy location is: {}",deliveryBoyLocation);
+            return findOptimalPath(deliveryBoyLocation,orders.get(0),orders.get(1));
+        }catch (Exception e) {
+            log.error("Error fetching orders: {}", e.getMessage(), e);
+            return null;
+        }
     }
 
     // Haversine formula to calculate distance between two points
@@ -100,9 +126,6 @@ public class DeliveryOrderService {
     }
 
 
-    public List<DeliveryOrder> getAllOrders() {
-        return deliveryOrderRepository.findAll();
-    }
 
 
 }
